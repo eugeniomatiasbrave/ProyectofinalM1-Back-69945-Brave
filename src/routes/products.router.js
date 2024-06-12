@@ -46,11 +46,11 @@ router.post('/', async (req, res) => {
 	const product = req.body; 
 	console.log('Coneté con router de Productos :) '); // veo si llega el body
     console.log(req.body);
-  /*
-	if (!product.title || !product.description || !product.code || !product.price || !product.category || !product.stock || !product.status=== true || !product.thumbnails) {
+  
+	if (!product.title || !product.description || !product.code || !product.price || !product.category || !product.stock ) {
 	  return res.status(400).send({ status:"error", error: 'Faltan datos para crear el producto'});
 	} 
-  */
+  
 	try {
 	const newProduct = {
 		title: product.title,

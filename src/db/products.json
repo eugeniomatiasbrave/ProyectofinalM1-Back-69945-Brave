@@ -110,25 +110,14 @@
 		"pid": 10
 	},
 	{
-		"title": "Batata",
-		"description": "por kilo",
-		"price": 1000,
-		"code": "abc006",
-		"status": true,
-		"stock": 90,
-		"category": "Verduras",
-		"thumbnails": [],
-		"pid": 11
-	},
-	{
 		"title": "Ciruela",
 		"description": "Por kg",
 		"price": 1000,
-		"code": "abc011",
+		"code": "we344",
 		"status": true,
 		"stock": 90,
 		"category": "Frutas",
 		"tumbnails": [],
-		"pid": 12
+		"pid": 11
 	}
 ]

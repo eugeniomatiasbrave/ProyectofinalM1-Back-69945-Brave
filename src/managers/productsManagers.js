@@ -14,14 +14,10 @@ class ProductsManagers {
 			//si ya existe el archivo no hace nada...
 			console.log('Ya existe el archivo products.json');
 		} else {
-
 			try {
-				await fs.promises.writeFile(PATH, JSON.stringify([]), 'utf-8')
-				
+			  await fs.promises.writeFile(PATH, JSON.stringify([]), 'utf-8')	
 			} catch (error) { // si algo sale mal
-
 				console.log('Error al crear el archivo', error);
-
                 process.exit(1); // aca corta el servidor y el proceso de crear el archivo si hay un error
 			}
 		}
@@ -47,11 +43,9 @@ class ProductsManagers {
 	}
 
 	async createProduct(product) {
-		
 		const products = await this.getProducts(); // traigo los productos existentes.
 
 		// consulto.
-
 		if (!products) {
 		   return -1; // Si yo creo mis id a partir de 1 en adelante, -1 es un error (segun mi logica, yo creo mi logica al poner -1).
 		} 
@@ -73,7 +67,6 @@ class ProductsManagers {
     }
 
 	async getProductById(pid){
-
 		const products = await this.getProducts(); // traigo los productos existentes.
 		const productById = products.find((product) => product.pid === pid); // consulto x id
 
@@ -85,7 +78,6 @@ class ProductsManagers {
 	
 // Método deleteProduct
     async deleteProduct(pid) {
-
 	   const products = await this.getProducts(); 
 	   const filteredProducts = products.filter((product) => product.pid != pid);  
 	   const deleted = await this.saveProducts(filteredProducts); 
@@ -98,7 +90,6 @@ class ProductsManagers {
 
 // Método updateProduct
     async updateProduct(pid, updateData) { // requiero ambos argumentos ( id y updateData ) para poder luego usarlos en el endpoint.
-
         const products = await this.getProducts();  // busco en el archivo los productos.
         const productIndex = products.findIndex((product) => product.pid == pid);  // busco el índice del producto con el id especificado.
 
@@ -109,16 +100,13 @@ class ProductsManagers {
         // Actualizo el producto con los nuevos datos, excluyendo el id.
         const updatedProduct = { ...products[productIndex], ...updateData, pid: products[productIndex].pid };
         products[productIndex] = updatedProduct;  // reemplazo el producto en el array.
-
         const updated = await this.saveProducts(products); // guardo los productos actualizados.
 
         if (!updated) {
           return -1; // no se pudo actualizar, devuelvo -1 (mi propia lógica)
         }
-
         return updatedProduct; // si todo salió bien, devuelvo el producto actualizado.
     };
 };
-
 
 export default ProductsManagers;  

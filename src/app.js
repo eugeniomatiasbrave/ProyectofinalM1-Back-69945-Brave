@@ -47,7 +47,13 @@ socketServer.on('connection', async (socket)=>{
     socket.on('createProduct', async (data) =>{
         await productsManager.createProduct(data);
         const productsIo = await productsManager.getProducts();
-        socketServer.emit('ProductsIo', productsIo)
+        socketServer.emit('ProductsIo', productsIo);
+    })
+
+    socket.on('deleteProduct', async(pid)=>{
+        await productsManager.deleteProduct(pid);
+        const productsIo = await productsManager.getProducts();
+        socketServer.emit('ProductsIo', productsIo);
     })
 })
 
