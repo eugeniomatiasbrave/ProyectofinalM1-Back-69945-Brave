@@ -88,36 +88,14 @@
 		"pid": 8
 	},
 	{
-		"title": "Uvas",
-		"description": "Por kg oferta",
-		"price": 1000,
-		"code": "abc010",
-		"status": true,
-		"stock": 90,
-		"category": "Frutas",
-		"thumbnails": [],
-		"pid": 9
-	},
-	{
-		"title": "Maracuya",
-		"description": "Por kg",
-		"price": 1000,
-		"code": "abc020",
-		"status": true,
-		"stock": 90,
-		"category": "Frutas",
-		"thumbnails": [],
-		"pid": 10
-	},
-	{
 		"title": "Ciruela",
 		"description": "Por kg",
-		"price": 1000,
-		"code": "we344",
+		"price": 3000,
+		"code": "abc100",
 		"status": true,
-		"stock": 90,
+		"stock": 900,
 		"category": "Frutas",
 		"tumbnails": [],
-		"pid": 11
+		"pid": 9
 	}
 ]
