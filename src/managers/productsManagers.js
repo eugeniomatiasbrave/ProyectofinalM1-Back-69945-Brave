@@ -1,6 +1,7 @@
 import fs from 'fs';
+import __dirname from '../utils.js';
 
-const PATH = './src/files/products.json';
+const PATH = `${__dirname}/db/products.json`;
 
 class ProductsManagers {
 	constructor() {
@@ -45,20 +46,8 @@ class ProductsManagers {
 		}
 	}
 
-	async createProduct({ title,description,code,price,status,stock,category, thumbnail
-		 }) {
+	async createProduct(product) {
 		
-		const newProduct = {
-			title,
-            description,
-            code,
-            price,
-			status:true,
-			stock,
-			category,
-			thumbnail: [],
-		}
-
 		const products = await this.getProducts(); // traigo los productos existentes.
 
 		// consulto.
@@ -69,18 +58,18 @@ class ProductsManagers {
 
         if (products.length === 0) {
 	       // si es el primer registro, el id es 1.
-	      newProduct.pid = 1;
+		   product.pid = 1;
 		} else {
-          newProduct.pid = products[products.length - 1].pid + 1;
+			product.pid = products[products.length - 1].pid + 1;
 		}
-		products.push(newProduct); // agrego el nuevo producto al array.
+		products.push(product); // agrego el nuevo producto al array.
 
 		const created = await this.saveProducts(products); // guardo los productos actualizadas.
 
 		if (!created) {
 			return -1; // no se pudo crear, devuelvo -1 (mi propia logica)
 		}
-		return newProduct.pid; // si todo salio bien, devuelvo el id.
+		return created.pid; // si todo salio bien, devuelvo el id.
     }
 
 	async getProductById(pid){

@@ -1,0 +1,35 @@
+
+<h1>Crear Producto</h1>
+
+<form action="/api/products" method="POST" id="formProduct"> 
+	<label for="">Titulo</label>
+	<input name="title" id="title">
+  <br>
+	<label for="">Description</label>
+	<input name="description" id="description">
+	 <br>
+	<label for="">Code</label>
+	<input name="code" id="code">
+  <br>
+	<label for="">Price</label>
+	<input  type="number" name="price" id="price">
+	<br>
+	<label for="">Stock</label>
+	<input type="number" name="stock" id="stock">
+  <br>
+	<label for="">Category</label>
+	<input  name="category" id="category">
+	<br>
+  <input type="submit" />
+</form>
+
+<!--vista de productos-->
+<div id="productsContainer">
+ 
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/realTimeProducts.js"></script>
+
+
+

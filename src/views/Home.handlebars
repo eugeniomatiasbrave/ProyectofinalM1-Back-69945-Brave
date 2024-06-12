@@ -1,0 +1,22 @@
+<!--vista de productos-->
+
+{{#if products}}
+
+<h1>Lista de Productos</h1>
+{{else}}
+<h1>No hay lista de productos en este momento</h1>
+{{/if}}
+
+{{#each products}}
+	<div>
+		<p>Titulo: {{this.title}}</p> <!--uso un this. para reconocer y luego recorrer la entidad -->
+		<p>Descripción: {{this.description}}</p>
+		<p>Código: {{this.code}}</p>
+		<p>Precio: {{this.price}}</p>
+		<p>Status: {{this.status}}</p>
+		<p>Stock: {{this.stock}}</p>
+		<p>Categoría: {{this.category}}</p>
+	</div>
+	<br>
+{{/each}}
+

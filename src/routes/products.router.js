@@ -44,18 +44,37 @@ router.get('/:pid', async (req, res) => {
 //Endpoint para crear una producto.
 router.post('/', async (req, res) => { 
 	const product = req.body; 
-  
-	if (!product.title || !product.description || !product.code || !product.price || !product.category ) {
+	console.log('Coneté con router de Productos :) '); // veo si llega el body
+    console.log(req.body);
+  /*
+	if (!product.title || !product.description || !product.code || !product.price || !product.category || !product.stock || !product.status=== true || !product.thumbnails) {
 	  return res.status(400).send({ status:"error", error: 'Faltan datos para crear el producto'});
 	} 
-  
-	const result = await managerProducts.createProduct(product);
+  */
+	try {
+	const newProduct = {
+		title: product.title,
+		description: product.description,
+		price: Number(product.price),
+		code: product.code,
+		status: true,
+		stock: Number(product.stock),
+		category: product.category,
+		thumbnails: []
+	   }
+
+	const result = await managerProducts.createProduct(newProduct);
   
 	if (result === -1) {
 	  return res.status(500).send({ status:"error", error: 'Error al crear el producto'});
 	}
 	
-	res.send({ status:"success", message: `Producto creado id: ${result}`, data: result }); // data: result es el producto creado.
+	res.send({ status:"success", message: 'Producto creado' , payload: result }); // data: result es el producto creado.
+
+    } catch (error) {
+	  console.log (error);
+	  res.status(500).send({status:'error', error: error});
+     }
   });
   
 

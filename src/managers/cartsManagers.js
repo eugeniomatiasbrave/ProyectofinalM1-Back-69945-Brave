@@ -1,6 +1,7 @@
 import fs from 'fs';
+import __dirname from '../utils.js';
 
-const PATH = './src/files/carts.json';
+const PATH = `${__dirname}/db/carts.json`;
 
 class CartsManagers {
 	constructor() {
