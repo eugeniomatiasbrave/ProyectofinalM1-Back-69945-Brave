@@ -13,32 +13,39 @@ div {
 	color: #333;
 	text-align: center;
 	margin-bottom: 20px;
+	padding-top: 20px;
   }
   
-  /* Estilos para la tabla */
-  table {
-	width: 100%;
-	border-collapse: collapse;
-	margin-bottom: 20px;
+  /* Estilos para card */
+  
+  .cards-container {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 5px;
+	justify-content: center;
   }
   
-  thead {
-	background-color: #f2f2f2;
+  .card {
+	border: 1px solid #ccc;
+	border-radius: 8px;
+	padding: 16px;
+	width: 300px;
+	box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+	transition: transform 0.3s ease;
   }
   
-  th, td {
-	border: 1px solid #ddd;
-	text-align: left;
-	padding: 8px;
+  .card:hover {
+	transform: translateY(-5px);
+	box-shadow: 0 6px 12px rgba(0,0,0,0.15);
   }
   
-  th {
-	font-weight: bold;
+  .card h2 {
+	margin-top: 0;
   }
   
-  /* Estilo para las filas de la tabla */
-  tr:nth-child(even) {
-	background-color: #f9f9f9;
+  .card p {
+	margin-bottom: 10px;
+	line-height: 1.5;
   }
   
   /* Estilo para el mensaje cuando no hay productos */
@@ -90,6 +97,21 @@ div {
   
   .btn-primary:hover {
 	background-color: #0056b3;
+  }
+
+  .btn-secundary {
+	background-color: red;
+	border-color: red;
+	color: white;
+	font-family: 'Arial', sans-serif;
+	font-size: 15px;
+	padding: 8px;
+	border-radius: 5px;
+	cursor: pointer;
+  }
+  
+  .btn-secundary:hover {
+	background-color: red;
   }
   
   
