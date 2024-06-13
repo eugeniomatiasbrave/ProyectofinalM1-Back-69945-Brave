@@ -6,11 +6,12 @@ socket.on('ProductsIo', (data) => {
 
 function updateProductsList(productsIo) {
   const productsContainer = document.getElementById('productsContainer');
+
+  productsContainer.innerHTML = '';
   // Iterar sobre cada producto y crear su representación en el DOM
   productsIo.forEach(product => {
     const productDiv = document.createElement('div');
     productDiv.innerHTML = `
-   
     <div class="card">
     <h2>${product.title}</h2>
     <p>Descripción: ${product.description}</p>

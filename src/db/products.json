@@ -77,25 +77,14 @@
 		"pid": 7
 	},
 	{
-		"title": "Eemoñacha",
-		"description": "por kg. ",
-		"price": 700,
-		"code": "abc889",
-		"status": true,
-		"stock": 201,
-		"category": "Hortalizas",
-		"thumbnails": [],
-		"pid": 8
-	},
-	{
 		"title": "Ciruela",
-		"description": "Por kg",
-		"price": 3000,
-		"code": "abc100",
+		"description": "Por kg oferta",
+		"price": 1000,
+		"code": "abc020",
 		"status": true,
-		"stock": 900,
+		"stock": 90,
 		"category": "Frutas",
 		"tumbnails": [],
-		"pid": 9
+		"pid": 8
 	}
 ]
