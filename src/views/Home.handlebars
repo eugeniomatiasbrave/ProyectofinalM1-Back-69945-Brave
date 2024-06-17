@@ -12,6 +12,11 @@
     <p>Status: {{this.status}}</p>
     <p>Stock: {{this.stock}}</p>
     <p>Categoría: {{this.category}}</p>
+    <div>
+    {{#each this.thumbnails}}
+        <img src={{this.path}} style="width:200px; height:200px; object-fit:cover;">
+    {{/each}}
+    </div>
   </div>
   {{/each}}
 </div>

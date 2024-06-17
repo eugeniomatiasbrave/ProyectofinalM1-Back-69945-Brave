@@ -63,7 +63,7 @@ class ProductsManagers {
 		if (!created) {
 			return -1; // no se pudo crear, devuelvo -1 (mi propia logica)
 		}
-		return created.pid; // si todo salio bien, devuelvo el id.
+		return created; // si todo salio bien, devuelvo el id.
     }
 
 	async getProductById(pid){

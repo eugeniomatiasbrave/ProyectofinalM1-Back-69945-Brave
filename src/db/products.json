@@ -86,5 +86,39 @@
 		"category": "Frutas",
 		"tumbnails": [],
 		"pid": 8
+	},
+	{
+		"title": "Papaya 1",
+		"description": "Por kg oferta",
+		"price": 1000,
+		"code": "we344",
+		"status": true,
+		"stock": 90,
+		"category": "Frutas",
+		"thumbnails": [
+			{
+				"maintype": "image/png",
+				"path": "/files/products/1718377171407-fifa2023-2.png",
+				"main": true
+			}
+		],
+		"pid": 9
+	},
+	{
+		"title": "weee",
+		"description": "Artes Marciales, torneo",
+		"price": 3000,
+		"code": "we344",
+		"status": true,
+		"stock": 90,
+		"category": "Frutas",
+		"thumbnails": [
+			{
+				"maintype": "image/png",
+				"path": "/files/products/1718646982087-fifa2023-1.png",
+				"main": true
+			}
+		],
+		"pid": 10
 	}
 ]

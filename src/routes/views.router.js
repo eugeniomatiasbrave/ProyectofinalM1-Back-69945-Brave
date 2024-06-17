@@ -17,7 +17,14 @@ router.get("/", async (req, res) => {
 });
 
 router.get("/realtimeproducts", async (req, res) => {
-	res.render("realTimeProducts");
+	const products = await managerProducts.getProducts();
+
+	if (!products) {
+		return res.render('404')
+	}
+	res.render("realTimeProducts", { 
+		products 
+	});
 });
 
 

@@ -1,5 +1,6 @@
 import { Router } from "express";
 import ProductsManagers from '../managers/productsManagers.js';
+import uploader from '../services/uploader.js';
 
 const router = Router();
 const managerProducts = new ProductsManagers();
@@ -8,7 +9,7 @@ const managerProducts = new ProductsManagers();
 
 router.get('/', async (req, res) => {
 	const limit = parseInt(req.query.limit);
-	let products = await managerProducts.getProducts();
+	const products = await managerProducts.getProducts();
   
 	if (products === null) {
 	  return res.status(500).send({ status:"error", error: 'Error al leer los productos'});
@@ -39,11 +40,11 @@ router.get('/:pid', async (req, res) => {
 	res.send({ status:"success", data: product })
 })
 
-  
 
 //Endpoint para crear una producto.
-router.post('/', async (req, res) => { 
+router.post('/', uploader.array('thumbnail', 3), async (req, res) => { 
 	const product = req.body; 
+	console.log(req.files);
 	console.log('Coneté con router de Productos :) '); // veo si llega el body
     console.log(req.body);
   
@@ -63,12 +64,17 @@ router.post('/', async (req, res) => {
 		thumbnails: []
 	   }
 
+	for (let  i=0 ; i < req.files.length; i++) {
+		newProduct.thumbnails.push({maintype:req.files[i].mimetype, path:`/files/products/${req.files[i].filename }`, main: i==0}); 
+	}
+
 	const result = await managerProducts.createProduct(newProduct);
-  
+	
 	if (result === -1) {
-	  return res.status(500).send({ status:"error", error: 'Error al crear el producto'});
+		return res.status(500).send({ status:"error", error: 'Error al crear el producto'});
 	}
 	
+	req.io.emit('newProduct',result);
 	res.send({ status:"success", message: 'Producto creado' , payload: result }); // data: result es el producto creado.
 
     } catch (error) {
