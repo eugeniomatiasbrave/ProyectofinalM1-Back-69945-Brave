@@ -40,6 +40,7 @@ app.use('/products', viewsRouter);
 app.use('/api/products', productsRouter);
 app.use('/api/carts', cartsRouter);
 
+
 io.on('connection', async (socket) => {
     console.log('Cliente conectado con id:', socket.id);
    
@@ -47,17 +48,33 @@ io.on('connection', async (socket) => {
     io.emit('ProductsIo', productsIo);
 
     socket.on('createProduct', async (data) => {
-        await productsService.createProduct(data);
-        const productsIo = await productsService.getProducts();
-        io.emit('ProductsIo', productsIo);
+        try {
+            await productsService.createProduct(data);
+            const productsIo = await productsService.getProducts();
+            io.emit('ProductsIo', productsIo);
+        } catch (error) {
+            console.error('Error creating product:', error);
+        }
     });
 
     socket.on('deleteProduct', async (pid) => {
-        await productsService.deleteProduct(pid);
-        const productsIo = await productsService.getProducts();
-        io.emit('ProductsIo', productsIo);
+        try {
+            await productsService.deleteProduct(pid);
+            const productsIo = await productsService.getProducts();
+            io.emit('ProductsIo', productsIo);
+        } catch (error) {
+            console.error('Error deleting product:', error);
+        }
+    });
+
+    socket.on('productsUpdated', async (productsIo) => {
+        try {
+            await productsService.getProducts();
+            io.emit('ProductsIo', productsIo);
+        } catch (error) {
+            console.error('Error updating products:', error);
+        }
     });
 });
-
 
 

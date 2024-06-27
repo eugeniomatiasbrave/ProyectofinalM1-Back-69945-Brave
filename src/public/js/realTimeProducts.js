@@ -21,14 +21,12 @@ socket.on('ProductsIo', (data) => {
          console.log('Success:', data);
          form.reset(); 
          // Aquí puedes emitir un evento de WebSocket si es necesario o simplemente esperar a que el servidor emita un evento después de procesar los archivos
-         socket.emit('ProductsIo', data);
-         
+         socket.emit('createProduct', data);
         })
        .catch((error) => {
          console.error('Error:', error);
        });
  });
-
 
 
 function updateProductsList(productsIo) {
@@ -45,6 +43,7 @@ function updateProductsList(productsIo) {
       });
     }
     productDiv.innerHTML = `
+      <p>Descripción: ${product._id}</p>
       <h2>${product.title}</h2>
       <p>Descripción: ${product.description}</p>
       <p>Código: ${product.code}</p>
@@ -53,14 +52,28 @@ function updateProductsList(productsIo) {
       <p>Stock: ${product.stock}</p>
       <p>Categoría: ${product.category}</p>
       <div>${imagesHTML}</div>
-      <button type="button" class="btn-secundary" onclick="deleteProduct(${product.pid})">
+      <button type="button" class="btn-secundary" onclick="deleteProduct('${String(product._id)}')">
         Eliminar
       </button>
     `;
     productsContainer.appendChild(productDiv);
   });
+
 };
 
- function deleteProduct(productId){
-  socket.emit('deleteProduct', productId);
- }
+
+// Nueva función para eliminar un producto
+function deleteProduct(productId) {
+  fetch(`/api/products/${productId}`, {
+    method: 'DELETE'
+  })
+  .then(response => response.json())
+  .then(data => {
+    console.log('Product deleted:', data);
+    // Emitir un evento de WebSocket para actualizar la lista de productos
+    socket.emit('deleteProduct', productId);
+  })
+  .catch((error) => {
+    console.error('Error:', error);
+  });
+}

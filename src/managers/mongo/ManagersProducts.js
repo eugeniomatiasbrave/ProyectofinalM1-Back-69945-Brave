@@ -25,8 +25,8 @@ export default class ManagersProducts {
         
     }
 
-    deleteProduct(restaurantId){
-        return productModel.deleteOne({_id:restaurantId});
+    deleteProduct(pid){
+        return productModel.deleteOne({_id:pid});
     }
 	
 }

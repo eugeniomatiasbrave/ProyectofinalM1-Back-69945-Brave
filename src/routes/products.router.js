@@ -19,7 +19,7 @@ router.get('/', async (req, res) => {
 	  products = products.slice(0, limit);
 	}
   
-	//req.io.emit('Products',products);
+	req.io.emit('Products',products);
 	res.send({ status:"success", payload:products });
   });
 
@@ -75,7 +75,7 @@ router.post('/', uploader.array('thumbnail', 3), async (req, res) => {
 		return res.status(500).send({ status:"error", error: 'Error al crear el producto'});
 	}
 	
-	req.io.emit('newProduct',result);
+	req.io.emit('ProductsIo', await productsService.getProducts());
 	res.send({ status:"success", message: 'Producto creado' , payload: result }); // data: result es el producto creado.
 
     } catch (error) {
@@ -87,15 +87,22 @@ router.post('/', uploader.array('thumbnail', 3), async (req, res) => {
 
 //Endpoint para borrar un producto.
 router.delete('/:pid', async (req, res) => {
-	
 	const pid = req.params.pid;
-	const product = await productsService.deleteProduct(pid);
-	
-	if (product === -1) {
-		return res.status(500).send({ status:"error", error: 'Error al borrar el producto x'});
+	try {
+	  const product = await productsService.deleteProduct(pid);
+  
+	  if (product === -1) {
+		return res.status(500).send({ status: "error", error: 'Error al borrar el producto' });
+	  }
+  
+	  const updatedProducts = await productsService.getProducts();
+	  req.io.emit('ProductsIo', updatedProducts); // Emitir evento de WebSocket con la lista actualizada de productos
+	  res.send({ status: "success", data: product });
+	} catch (error) {
+	  console.error('Error deleting product:', error);
+	  res.status(500).send({ status: "error", error: 'Error al borrar el producto' });
 	}
-	res.send({ status:"success", data: product })
-})
+  });
 
 // Endpoint para actualizar un producto.
 router.put('/:pid', async (req, res) => {
@@ -112,6 +119,8 @@ router.put('/:pid', async (req, res) => {
     if (result === -1) {
         return res.status(500).send({ status: "error", error: 'Error al actualizar el producto' });
     }
+
+	req.io.emit('ProductsIo', await productsService.getProducts());
     res.send({ status: "success", message: `Producto actualizado id: ${pid}`, data: result })
 })
 
