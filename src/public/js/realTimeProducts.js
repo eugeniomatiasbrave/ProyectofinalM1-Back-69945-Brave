@@ -43,7 +43,6 @@ function updateProductsList(productsIo) {
       });
     }
     productDiv.innerHTML = `
-      <p>Descripción: ${product._id}</p>
       <h2>${product.title}</h2>
       <p>Descripción: ${product.description}</p>
       <p>Código: ${product.code}</p>
@@ -60,7 +59,6 @@ function updateProductsList(productsIo) {
   });
 
 };
-
 
 // Nueva función para eliminar un producto
 function deleteProduct(productId) {
