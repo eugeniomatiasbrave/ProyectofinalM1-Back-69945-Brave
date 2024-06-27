@@ -1,12 +1,10 @@
 import { Router } from "express";
-import ProductsManagers from "../managers/productsManagers.js";
+import {productsService} from "../managers/index.js";
 
 const router = Router();
-const managerProducts = new ProductsManagers();
-
 
 router.get("/", async (req, res) => {
-	const products = await managerProducts.getProducts();
+	const products = await productsService.getProducts();
 
 	if (!products) {
 		return res.render('404')
@@ -17,14 +15,14 @@ router.get("/", async (req, res) => {
 });
 
 router.get("/realtimeproducts", async (req, res) => {
-	const products = await managerProducts.getProducts();
+	const products = await productsService.getProducts();
 
 	if (!products) {
 		return res.render('404')
 	}
-	res.render("realTimeProducts", { 
-		products 
-	});
+	res.render("realTimeProducts"
+		 
+	);
 });
 
 

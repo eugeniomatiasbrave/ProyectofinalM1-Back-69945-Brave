@@ -21,7 +21,9 @@ socket.on('ProductsIo', (data) => {
          console.log('Success:', data);
          form.reset(); 
          // Aquí puedes emitir un evento de WebSocket si es necesario o simplemente esperar a que el servidor emita un evento después de procesar los archivos
-       })
+         socket.emit('ProductsIo', data);
+         
+        })
        .catch((error) => {
          console.error('Error:', error);
        });

@@ -1,15 +1,15 @@
 import { Router } from "express";
-import ProductsManagers from '../managers/productsManagers.js';
+import {productsService} from "../managers/index.js";
+//import { makeid } from "../utils.js";
 import uploader from '../services/uploader.js';
 
 const router = Router();
-const managerProducts = new ProductsManagers();
 
 //Endpoint para traer todos los productos + limit productos.
 
 router.get('/', async (req, res) => {
 	const limit = parseInt(req.query.limit);
-	const products = await managerProducts.getProducts();
+	const products = await productsService.getProducts();
   
 	if (products === null) {
 	  return res.status(500).send({ status:"error", error: 'Error al leer los productos'});
@@ -19,7 +19,8 @@ router.get('/', async (req, res) => {
 	  products = products.slice(0, limit);
 	}
   
-	res.send({ status:"success", data: products });
+	//req.io.emit('Products',products);
+	res.send({ status:"success", payload:products });
   });
 
 
@@ -31,7 +32,7 @@ router.get('/:pid', async (req, res) => {
 	  return res.status(400).send({ status:"error", error: 'El id proporcionado no es numérico'});
     }
 
-	const products = await managerProducts.getProducts(); // traigo los productos existentes en el archivo.json
+	const products = await productsService.getProducts(); // traigo los productos existentes en el archivo.json
 	const product = products.find(product => product.pid == pid);
 	
 	if (product === undefined) { // me conviene usar undefined en este contexto mas q -1
@@ -68,7 +69,7 @@ router.post('/', uploader.array('thumbnail', 3), async (req, res) => {
 		newProduct.thumbnails.push({maintype:req.files[i].mimetype, path:`/files/products/${req.files[i].filename }`, main: i==0}); 
 	}
 
-	const result = await managerProducts.createProduct(newProduct);
+	const result = await productsService.createProduct(newProduct);
 	
 	if (result === -1) {
 		return res.status(500).send({ status:"error", error: 'Error al crear el producto'});
@@ -88,7 +89,7 @@ router.post('/', uploader.array('thumbnail', 3), async (req, res) => {
 router.delete('/:pid', async (req, res) => {
 	
 	const pid = req.params.pid;
-	const product = await managerProducts.deleteProduct(pid);
+	const product = await productsService.deleteProduct(pid);
 	
 	if (product === -1) {
 		return res.status(500).send({ status:"error", error: 'Error al borrar el producto x'});
@@ -106,7 +107,7 @@ router.put('/:pid', async (req, res) => {
         delete updateData.pid;
     }
 
-    const result = await managerProducts.updateProduct(pid, updateData);
+    const result = productsService.updateProduct(pid, updateData);
 
     if (result === -1) {
         return res.status(500).send({ status: "error", error: 'Error al actualizar el producto' });

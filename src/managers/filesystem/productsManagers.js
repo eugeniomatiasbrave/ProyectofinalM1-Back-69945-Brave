@@ -1,5 +1,5 @@
 import fs from 'fs';
-import __dirname from '../utils.js';
+import __dirname from '../../utils.js';
 
 const PATH = `${__dirname}/db/products.json`;
 

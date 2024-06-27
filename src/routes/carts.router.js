@@ -1,10 +1,9 @@
 import { Router } from "express";
-import CartsManagers from '../managers/cartsManagers.js';
-import ProductsManagers from '../managers/productsManagers.js';
+import CartsManagers from '../managers/filesystem/cartsManagers.js';
+import {productsService} from "../managers/index.js";
 
 const router = Router();
 const managerCarts = new CartsManagers();
-const managerProducts = new ProductsManagers();
 
 
 ///// ENDPOINT creo un carrito con cid autogenerado y array de product vacio.////////
@@ -54,7 +53,7 @@ router.post('/:cid/product/:pid', async (req, res) => {
         return res.status(404).send({ status: "error", error: 'Carrito no encontrado' });
     }
 
-    const products = await managerProducts.getProducts();
+    const products = await productsService.getProducts();
     const product = products.find(product => product.pid == pid);
 
     if (!product) {
