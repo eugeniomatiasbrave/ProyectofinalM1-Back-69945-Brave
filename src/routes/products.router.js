@@ -28,12 +28,8 @@ router.get('/', async (req, res) => {
 router.get('/:pid', async (req, res) => {
 	const pid = req.params.pid;
 
-    if (isNaN(pid)) { // Validar si el id es numérico
-	  return res.status(400).send({ status:"error", error: 'El id proporcionado no es numérico'});
-    }
-
-	const products = await productsService.getProducts(); // traigo los productos existentes en el archivo.json
-	const product = products.find(product => product.pid == pid);
+	 // traigo el producto existente en el archivo.json o mongo db
+	const product = await productsService.getProductById(pid);
 	
 	if (product === undefined) { // me conviene usar undefined en este contexto mas q -1
 		return res.status(500).send({ status:"error", error: ' No se encontro el producto id:' + pid});
@@ -114,14 +110,14 @@ router.put('/:pid', async (req, res) => {
         delete updateData.pid;
     }
 
-    const result = productsService.updateProduct(pid, updateData);
+    const result = await productsService.updateProduct(pid, updateData);
 
     if (result === -1) {
         return res.status(500).send({ status: "error", error: 'Error al actualizar el producto' });
     }
-
-	req.io.emit('ProductsIo', await productsService.getProducts());
-    res.send({ status: "success", message: `Producto actualizado id: ${pid}`, data: result })
+	const updatedProduct = await productsService.getProductById(pid);
+	//req.io.emit('ProductsIo', await productsService.getProducts());
+    res.send({ status: "success", message: `Producto actualizado id: ${pid}`, data: updatedProduct })
 })
 
 

@@ -2,16 +2,16 @@ import productModel from './models/product.model.js';
 
 export default class ManagersProducts {
 	
-	createProduct(product){
+	createProduct(product){ // Crea uno nuevo
       return productModel.create(product);
 	};
 
     getProducts( opts = {} ) {
-		return productModel.find( opts ).lean(); // todos
+		return productModel.find( opts ).lean(); // Busca todos
 	};
 
-	getProductById ( opts={} ) {
-		return productModel.findOne( opts ); // solo uno
+	getProductById ( pid) {
+		return productModel.findOne( {_id: String(pid)}); // Busca solo uno
 	};
 
 	/*
@@ -21,11 +21,11 @@ export default class ManagersProducts {
     }
 	*/
 
-    updateProduct(){
-        
+    updateProduct(pid, updateData){ // edita uno
+        return productModel.updateOne({ _id: String(pid) }, { $set: updateData });
     }
-
-    deleteProduct(pid){
+ 
+    deleteProduct(pid){ // elimina uno
         return productModel.deleteOne({_id:pid});
     }
 	

@@ -36,7 +36,7 @@ class CartsManagers {
 		}
 	}
 
-	async saveCarts(carts){ 
+	async saveCarts(carts){ // Funcion de reuso
 		try {
 			await fs.promises.writeFile(PATH, JSON.stringify(carts,null,'\t'));
 			return true;
@@ -88,7 +88,7 @@ class CartsManagers {
 	     return filteredCarts;
     };
 
-// Método updateCart
+// Método updateCart, edita
     async updateCart(cid, updateData) { // requiero ambos argumentos ( id y updateData ) para poder luego usarlos en el endpoint.
 
         const carts = await this.getCarts();  // busco en el archivo los productos.

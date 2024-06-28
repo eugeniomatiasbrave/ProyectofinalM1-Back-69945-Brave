@@ -1,5 +1,5 @@
-import ManagersProducts from "./mongo/ManagersProducts.js";
-//import ManagersProducts from "./filesystem/productsManagers.js";
+import ManagersProducts from "./mongo/ManagersProducts.js";  // percistencia Mongo
+//import ManagersProducts from "./filesystem/productsManagers.js"; // Percistencia fs
 
 
 
