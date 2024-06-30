@@ -1,1 +1,19 @@
-[]
+[
+	{
+		"title": "Auto casafantasmas",
+		"description": "Oferta",
+		"price": 30000,
+		"code": "abc020",
+		"status": true,
+		"stock": 90,
+		"category": "Niño",
+		"thumbnails": [
+			{
+				"maintype": "image/png",
+				"path": "/files/products/1719601132176-autoCasafantasmas.png",
+				"main": true
+			}
+		],
+		"pid": 1
+	}
+]

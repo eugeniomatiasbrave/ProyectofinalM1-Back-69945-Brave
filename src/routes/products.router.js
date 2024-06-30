@@ -6,7 +6,6 @@ import uploader from '../services/uploader.js';
 const router = Router();
 
 //Endpoint para traer todos los productos + limit productos.
-
 router.get('/', async (req, res) => {
 	const limit = parseInt(req.query.limit);
 	const products = await productsService.getProducts();

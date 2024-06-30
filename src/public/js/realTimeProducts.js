@@ -51,7 +51,7 @@ function updateProductsList(productsIo) {
       <p>Stock: ${product.stock}</p>
       <p>Categoría: ${product.category}</p>
       <div>${imagesHTML}</div>
-      <button type="button" class="btn-secundary" onclick="deleteProduct('${String(product._id)}')">
+      <button type="button" class="btn-secundary" onclick="deleteProduct('${product._id}')">
         Eliminar
       </button>
     `;

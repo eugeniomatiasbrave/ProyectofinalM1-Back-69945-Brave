@@ -1,12 +1,22 @@
 import { Router } from "express";
-import CartsManagers from '../managers/filesystem/cartsManagers.js';
+import {cartsService} from "../managers/index.js";
 import {productsService} from "../managers/index.js";
 
 const router = Router();
-const managerCarts = new CartsManagers();
+
+router.get('/', async (req, res) => {
+	
+	const carts = await cartsService.getCarts();
+  
+	if (carts === null) {
+	  return res.status(500).send({ status:"error", error: 'Error al leer los carritos'});
+	}
+  
+	res.send({ status:"success", payload:carts });
+  });
 
 
-// 1. ENDPOINT que muestra los product de un carrito cid especifico // ok en manager
+// 1. ENDPOINT que muestra un carrito cid especifico // ok en manager
 router.get('/:cid', async (req, res) => {
 	const cid = req.params.cid;
 
@@ -14,7 +24,7 @@ router.get('/:cid', async (req, res) => {
 	  return res.status(400).send({ status:"error", error: 'El id proporcionado no es numérico'});
     }
 
-	const carts = await managerCarts.getCarts(); // traigo los carritos existentes en el archivo.json
+	const carts = await cartsService.getCarts(); // traigo los carritos existentes en el archivo.json
 	const cart = carts.find(cart => cart.cid == cid);
 	const ProductToCart = cart.products
 
@@ -29,14 +39,12 @@ router.get('/:cid', async (req, res) => {
 // 2. ENDPOINT creo un carrito con cid autogenerado y array de product vacio.// ok en manager
 router.post('/', async (req, res) => {
 	const cart = req.body;
-	const result = await managerCarts.createCart(cart);
+	const result = await cartsService.createCart(cart);
       if (result === -1) {
       return res.status(500).send({ status:"error", error: 'Error al crear el producto'});
     }
     res.send({ status:"success", message: `Producto creado id: ${result}`, data: result }); 
    })
-
-
 
 
 // 3. ENDPOINT agregar el producto al arreglo “products” del carrito seleccionado // 
@@ -48,7 +56,7 @@ router.post('/:cid/product/:pid', async (req, res) => {
         return res.status(400).send({ status: "error", error: 'El cid o el pid proporcionado no es numérico' });
     }
 
-    const carts = await managerCarts.getCarts();
+    const carts = await cartsService.getCarts();
     const cart = carts.find(cart => cart.cid == cid);
 
     if (!cart) {
@@ -77,7 +85,7 @@ router.post('/:cid/product/:pid', async (req, res) => {
         });
     }
 
-    const updateResult = await managerCarts.updateCart(cid, cart);
+    const updateResult = await cartsService.updateCart(cid, cart);
 
     if (updateResult === -1) {
         return res.status(500).send({ status: "error", error: 'Error al actualizar el carrito' });
@@ -91,13 +99,13 @@ router.post('/:cid/product/:pid', async (req, res) => {
 router.delete('/:cid', async (req, res) => {
 	const cid = req.params.cid;
 	try {
-	  const cart = await managerCarts.deleteCart(cid);
+	  const cart = await cartsService.deleteCart(cid);
   
 	  if (cart === -1) {
 		return res.status(500).send({ status: "error", error: 'Error al borrar todos los productos del carrito' });
 	  }
   
-	  const updatedProducts = await managerCarts.getCarts();
+	  const updatedProducts = await cartsService.getCarts();
 	  req.io.emit('ProductsIo', updatedProducts); // Emitir evento de WebSocket con la lista actualizada de productos
 	  res.send({ status: "success", data: product });
 	} catch (error) {
