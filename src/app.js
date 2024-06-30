@@ -40,7 +40,6 @@ app.use('/products', viewsRouter);
 app.use('/api/products', productsRouter);
 app.use('/api/carts', cartsRouter);
 
-
 io.on('connection', async (socket) => {
     console.log('Cliente conectado con id:', socket.id);
    
