@@ -15,10 +15,14 @@ export default class ManagersCarts {
         return newCart.save();
     }
 
-    // Método updateCart, edita
-    updateCart(cid, updateData) { // requiero ambos argumentos ( id y updateData ) para poder luego usarlos en el endpoint.
-        return cartModel.updateOne({ _id: String(cid) }, { $set: updateData });
+    // Método para agregar un producto al carrito seleccionado
+    addProductToCart(cid, product) {
+        return cartModel.updateOne(
+            { _id: String(cid) },
+            { $push: { products: product } }
+        );
     };
+
 
     //Metodo elimina un product del carrito
     deleteProductCart(cid, pid) {
