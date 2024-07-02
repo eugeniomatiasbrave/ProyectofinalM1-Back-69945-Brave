@@ -18,12 +18,7 @@ router.get('/', async (req, res) => {
 router.get('/:cid', async (req, res) => {
 	const cid = req.params.cid;
 
-    if (isNaN(cid)) { // Validar si el id es numérico
-	    return res.status(400).send({ status:"error", error: 'El id proporcionado no es numérico'});
-    }
-
-    const carts = await cartsService.getCarts();
-    const cart = carts.find(cart => cart.cid == cid);
+    const cart = await cartsService.getCartById(String(cid));
 	  const ProductToCart = cart.products
 
 	  if (cart === undefined) { // me conviene usar undefined en este contexto mas q -1
@@ -98,6 +93,12 @@ router.put('/:cid', async (req, res) => {
   const cid = req.params.cid;
   const products = req.body.products; // Suponiendo que se envía un array de productos en el cuerpo de la solicitud
 
+  const cart = await cartsService.getCartById(String(cid));
+
+  if (cart === undefined) { // me conviene usar undefined en este contexto mas q -1
+    return res.status(500).send({ status:"error", error: ' No se encontro el carrito' });
+  }
+  
   try {
       const updateResult = await cartsService.updateCart(cid, products);
 
@@ -112,9 +113,24 @@ router.put('/:cid', async (req, res) => {
   }
 });
 
-// PUT api/carts/:cid/products/:pid deberá poder actualizar SÓLO la cantidad de ejemplares del producto por cualquier cantidad pasada desde req.body
+// 7. PUT api/carts/:cid/products/:pid deberá poder actualizar SÓLO la cantidad de ejemplares del producto por cualquier cantidad pasada desde req.body
+router.put('/:cid/products/:pid', async (req, res) => {
+  const { cid, pid } = req.params;
+  const { quantity } = req.body;
 
+  try {
+      const result = await cartsService.updateProductQuantity(cid, pid, quantity);
 
+      if (result.nModified === 0) {
+          return res.status(500).send({ status: "error", error: 'Error al actualizar la cantidad del producto en el carrito' });
+      }
+
+      res.send({ status: "success", message: 'Cantidad del producto actualizada en el carrito' });
+  } catch (error) {
+      console.error('Error al actualizar la cantidad del producto en el carrito:', error);
+      res.status(500).send({ status: "error", error: 'Error al actualizar la cantidad del producto en el carrito' });
+  }
+});
 
 
 

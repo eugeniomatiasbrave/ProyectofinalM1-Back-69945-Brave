@@ -39,6 +39,22 @@ export default class ManagersCarts {
             { $set: { products: [] } }
         );
     };
+
+// Metodo para actualizar todos los productos
+    updateCart(cid, products) {
+        return cartModel.updateOne(
+            { _id: String(cid) },
+            { $set: { products: products } }
+        );
+    };
+
+// Metodo para actualizar la cantidad del producto
+    updateProductQuantity(cid, pid, quantity) {
+        return cartModel.updateOne(
+            { _id: String(cid), "products.product": pid },
+            { $set: { "products.$.quantity": quantity } }
+        );
+    };
 };
 
 
