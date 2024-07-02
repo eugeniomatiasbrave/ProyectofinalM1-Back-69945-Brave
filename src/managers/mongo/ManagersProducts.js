@@ -14,7 +14,7 @@ export default class ManagersProducts {
         //$push aplica para campos de tipo arreglo
         return productModel.updateOne({_id:restaurantId},{$push:{menu:dish}})
     } */
-
+ 
     createProduct(product){ // Crea uno nuevo
         return productModel.create(product);
     };

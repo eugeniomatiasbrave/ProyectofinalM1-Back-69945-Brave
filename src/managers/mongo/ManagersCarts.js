@@ -1,6 +1,5 @@
 import cartModel from './models/cart.model.js';
 
-
 export default class ManagersCarts {
 	
 	getCarts( opts={}) { 
@@ -8,21 +7,33 @@ export default class ManagersCarts {
 	}
 
     getCartById (cid) {
-		return cartModel.findOne( {_id: String(cid)}); // Busca solo uno
+		return cartModel.findOne( {_id: String(cid)}).lean(); // Busca solo uno
 	};
 
-	createCart() {
-        return cartModel.create(product);
+    createCart() {
+        const newCart = new cartModel({ products: [] });
+        return newCart.save();
     }
 
     // Método updateCart, edita
     updateCart(cid, updateData) { // requiero ambos argumentos ( id y updateData ) para poder luego usarlos en el endpoint.
-        return cartModel.updateOne({ _id: String(pid) }, { $set: updateData });
+        return cartModel.updateOne({ _id: String(cid) }, { $set: updateData });
     };
 
-    // Método deleteCard
-    deleteCart(cid) {
-        return cartModel.deleteOne({_id:pid});
+    //Metodo elimina un product del carrito
+    deleteProductCart(cid, pid) {
+        return cartModel.updateOne(
+            { _id: String(cid) },
+            { $pull: { products: { _id: pid } } }
+        );
+    };
+
+    // Método deleteCard, no limina el carrito
+    deleteAllProductsCid(cid) {
+        return cartModel.updateOne(
+            { _id: String(cid) },
+            { $set: { products: [] } }
+        );
     };
 };
 

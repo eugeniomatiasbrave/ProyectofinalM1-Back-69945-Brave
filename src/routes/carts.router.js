@@ -35,36 +35,28 @@ router.get('/:cid', async (req, res) => {
 	res.send({ status:"success", data: ProductToCart })
 })
 
-
-// 2. ENDPOINT creo un carrito con cid autogenerado y array de product vacio.// ok en manager
+// 2. crea el carrito...OK
 router.post('/', async (req, res) => {
-	const cart = req.body;
-	const result = await cartsService.createCart(cart);
-      if (result === -1) {
-      return res.status(500).send({ status:"error", error: 'Error al crear el producto'});
-    }
-    res.send({ status:"success", message: `Producto creado id: ${result}`, data: result }); 
-   })
+  try {
+      const newCart = await cartsService.createCart();
+      res.status(201).send({ status: "success", data: newCart });
+  } catch (error) {
+      console.error('Error creating cart:', error);
+      res.status(500).send({ status: "error", error: 'Error al crear el carrito' });
+  }
+});
 
 
-// 3. ENDPOINT agregar el producto al arreglo “products” del carrito seleccionado // 
+// 3. ENDPOINT agregar el producto al arreglo “products” del carrito seleccionado // OK
 router.post('/:cid/product/:pid', async (req, res) => {
-    const cid = parseInt(req.params.cid);
-    const pid = parseInt(req.params.pid);
-
-    if (isNaN(cid) || isNaN(pid)) {
-        return res.status(400).send({ status: "error", error: 'El cid o el pid proporcionado no es numérico' });
-    }
-
-    const carts = await cartsService.getCarts();
-    const cart = carts.find(cart => cart.cid == cid);
+    const { cid, pid } = req.params; 
+    const cart = await cartsService.getCartById(String(cid));
 
     if (!cart) {
         return res.status(404).send({ status: "error", error: 'Carrito no encontrado' });
     }
 
-    const products = await productsService.getProducts();
-    const product = products.find(product => product.pid == pid);
+    const product = await productsService.getProductById(pid);
 
     if (!product) {
         return res.status(404).send({ status: "error", error: 'Producto no encontrado con id: ' + pid});
@@ -72,7 +64,7 @@ router.post('/:cid/product/:pid', async (req, res) => {
 
     let quantity = parseInt(req.body.quantity) || 1; // Si no se envia un quantity por defecto es 1
 
-    const productIndex = cart.products.findIndex(p => p.product === pid);
+    const productIndex = cart.products.findIndex(p => p.product.toString() === pid); // Ensure comparison is correct
 
     if (productIndex !== -1) {
         // El producto ya existe en el carrito, sumo el existente con el muevo quantity .
@@ -94,27 +86,25 @@ router.post('/:cid/product/:pid', async (req, res) => {
     res.send({ status: "success", message: 'Producto agregado/actualizado en el carrito', data: cart });
 });
 
-// DELETE api/carts/:cid deberá eliminar todos los productos del carrito. No elimina el carrito.
 
+// 4. DELETE api/carts/:cid deberá eliminar todos los product pid de products dejando el cid con su products:[]. No elimina el carrito cid.
 router.delete('/:cid', async (req, res) => {
-	const cid = req.params.cid;
-	try {
-	  const cart = await cartsService.deleteCart(cid);
+  const cid = req.params.cid;
+  const result = await cartsService.deleteAllProductsCid(cid);
   
-	  if (cart === -1) {
-		return res.status(500).send({ status: "error", error: 'Error al borrar todos los productos del carrito' });
-	  }
-  
-	  const updatedProducts = await cartsService.getCarts();
-	  req.io.emit('ProductsIo', updatedProducts); // Emitir evento de WebSocket con la lista actualizada de productos
-	  res.send({ status: "success", data: product });
-	} catch (error) {
-	  console.error('Error deleting product:', error);
-	  res.status(500).send({ status: "error", error: 'Error al borrar el producto' });
-	}
-  });
+  res.send({ message: 'All products removed from cart', data: result });
+});
 
-// DELETE api/carts/:cid/products/:pid deberá eliminar del carrito el producto seleccionado.
+// 5. eliminar del carrito el producto seleccionado. OK
+router.delete('/:cid/product/:pid', async (req, res) => {
+  const cid = req.params.cid; 
+  const pid = req.params.pid;
+  
+  const result = await cartsService.deleteProductCart(cid, pid);
+
+  res.send({ message: 'Product removed from cart', data: result });
+});
+
 // PUT api/carts/:cid deberá actualizar todos los productos del carrito con un arreglo de productos.
 // PUT api/carts/:cid/products/:pid deberá poder actualizar SÓLO la cantidad de ejemplares del producto por cualquier cantidad pasada desde req.body
 
