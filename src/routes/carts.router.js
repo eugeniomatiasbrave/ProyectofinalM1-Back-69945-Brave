@@ -38,7 +38,6 @@ router.post('/', async (req, res) => {
   }
 });
 
-
 // 3. ENDPOINT agregar el producto al arreglo “products” del carrito seleccionado // OK
 router.post('/:cid/products/:pid', async (req, res) => {
   const { cid, pid } = req.params; 
@@ -57,7 +56,6 @@ router.post('/:cid/products/:pid', async (req, res) => {
   let quantity = parseInt(req.body.quantity) || 1; // Si no se envía un quantity, por defecto es 1
   const productToAdd = { product: pid, quantity };
   
-
   try {
       const updateResult = await cartsService.addProductToCart(cid, productToAdd);
 
@@ -72,12 +70,11 @@ router.post('/:cid/products/:pid', async (req, res) => {
   }
 });
 
-
 // 4. DELETE api/carts/:cid deberá eliminar todos los product pid de products dejando el cid con su products:[]. No elimina el carrito cid.
 router.delete('/:cid', async (req, res) => {
   const cid = req.params.cid;
   const result = await cartsService.deleteAllProductsCid(cid);
-  res.send({ message: 'All products removed from cart', data: result });
+  res.send({ message: 'Todos los products borrados del carrito', data: result });
 });
 
 // 5. eliminar del carrito el producto seleccionado. OK
@@ -85,7 +82,7 @@ router.delete('/:cid/products/:pid', async (req, res) => {
   const cid = req.params.cid; 
   const pid = req.params.pid;
   const result = await cartsService.deleteProductCart(cid, pid);
-  res.send({ message: 'Product removed from cart', data: result });
+  res.send({ message: 'Producto eliminado del carrito', data: result });
 });
 
 // 6. ENDPOINT PUT api/carts/:cid deberá actualizar todos los productos del carrito con un arreglo de productos.

@@ -2,18 +2,17 @@ import productModel from './models/product.model.js';
 
 export default class ManagersProducts {
 	
-    getProducts (opts={}) {
-		return productModel.find( opts ).lean(); // Busca todos
+    getProducts(page, limit) { // Busca todos
+		 return productModel.paginate({},{ limit, page,  lean:true });
 	};
 
-	getProductById (pid) {
-		return productModel.findOne( {_id: String(pid)}); // Busca solo uno
-	};
+    getProductsViews() {
+        return productModel.find({}).lean();
+    };
 
-    /* addDish(restaurantId,dish){
-        //$push aplica para campos de tipo arreglo
-        return productModel.updateOne({_id:restaurantId},{$push:{menu:dish}})
-    } */
+	getProductById (pid) { // Busca solo uno
+		return productModel.findOne( {_id: (pid)}); 
+	};
  
     createProduct(product){ // Crea uno nuevo
         return productModel.create(product);

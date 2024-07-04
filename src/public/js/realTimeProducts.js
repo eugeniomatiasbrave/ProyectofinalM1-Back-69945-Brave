@@ -1,10 +1,13 @@
-
 const socket = io();
 
 socket.on('ProductsIo', (data) => {
   updateProductsList(data);
-})
+});
 
+
+socket.on('productsUpdated', (updatedProducts) => {
+  updateProductsList(updatedProducts);
+});
 
  // Escuchar el evento de envío del formulario
  const form = document.getElementById('formProduct');
@@ -57,7 +60,7 @@ function updateProductsList(productsIo) {
     `;
     productsContainer.appendChild(productDiv);
   });
-
+  
 };
 
 // Nueva función para eliminar un producto

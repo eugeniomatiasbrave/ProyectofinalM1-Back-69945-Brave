@@ -4,26 +4,33 @@ import {productsService} from "../managers/index.js";
 const router = Router();
 
 router.get("/", async (req, res) => {
-	const products = await productsService.getProducts();
+	
+	const page = parseInt(req.query.page) || 1;
+	const limit = parseInt(req.query.limit) || 4;
+
+	const productsPaginate = await productsService.getProducts(page, limit);
+	const products = productsPaginate.docs;
+	const {hasPrevPage, hasNextPage, prevPage,nextPage, page:currentPage} = productsPaginate;
+
+	console.log(productsPaginate)
 
 	if (!products) {
 		return res.render('404')
 	}
+
 	res.render("Home", { 
-		products 
+		products, 
+		page: currentPage,
+		hasPrevPage, 
+		hasNextPage,
+		prevPage,
+		nextPage	
 	});
 });
 
 router.get("/realtimeproducts", async (req, res) => {
-	const products = await productsService.getProducts();
-
-	if (!products) {
-		return res.render('404')
-	}
-	res.render("realTimeProducts"
-		 
-	);
+	
+	res.render("realTimeProducts")
 });
-
 
 export default router;

@@ -1,40 +1,29 @@
 // ENTREGA FINAL MODULO 1 ///
 
-Deberás entregar el proyecto que has venido armando, cambiando persistencia en base de datos, además de agregar algunos endpoints nuevos a tu Api.
-
-Objetivos generales
-
-Contarás con Mongo como sistema de persistencia principal
-Tendrás definidos todos los endpoints para poder trabajar con productos y carritos.
-
-Objetivos específicos
-
-Profesionalizar las consultas de productos con filtros, paginación y ordenamientos
-Profesionalizar la gestión de carrito para implementar los últimos conceptos vistos.
-
 Formato
-
-Link al repositorio de Github, sin la carpeta de node_modules
-
-Sugerencias
+ OK. Link al repositorio de Github, sin la carpeta de node_modules
 
 Permitir comentarios en el archivo
-La lógica del negocio que ya tienes hecha no debería cambiar, sólo su persistencia.
-Los nuevos endpoints deben seguir la misma estructura y lógica que hemos seguido.
+ OK. La lógica del negocio que ya tienes hecha no debería cambiar, sólo su persistencia.
+ OK. Los nuevos endpoints deben seguir la misma estructura y lógica que hemos seguido.
 
 Se debe entregar:
 
--Con base en nuestra implementación actual de productos, modificar el método GET / para que cumpla con los siguientes puntos:
-Deberá poder recibir por query params un limit (opcional), una page (opcional), un sort (opcional) y un query (opcional)
--limit permitirá devolver sólo el número de elementos solicitados al momento de la petición, en caso de no recibir limit, éste será de 10.
--page permitirá devolver la página que queremos buscar, en caso de no recibir page, ésta será de 1
-
--query, el tipo de elemento que quiero buscar (es decir, qué filtro aplicar), en caso de no recibir query, realizar la búsqueda general
-sort: asc/desc, para realizar ordenamiento ascendente o descendente por precio, en caso de no recibir sort, no realizar ningún ordenamiento
+ Modificar el método GET / para que cumpla con los siguientes puntos:
+ Deberá poder recibir por query params 
+  Un limit (opcional) 
+     -limit permitirá devolver sólo el número de elementos solicitados al momento de la petición, en caso de no recibir limit, éste será de 10.
+  Una page (Si o si)
+     -page permitirá devolver la página que queremos buscar, en caso de no recibir page, ésta será de 1
+  Un sort (opcional) 
+     -sort: asc/desc, para realizar ordenamiento ascendente o descendente por precio, en caso de no recibir sort, no realizar ningún ordenamiento
+  Un query (opcional)
+     -query, el tipo de elemento que quiero buscar (es decir, qué filtro aplicar), en caso de no recibir query, realizar la búsqueda general
+  
 
 Se debe entregar:
 
-El método GET deberá devolver un objeto con el siguiente formato:
+El método GET de todos los productos deberá devolver un objeto con el siguiente formato:
 {
 status:success/error
 payload: Resultado de los productos solicitados
@@ -48,17 +37,20 @@ prevLink: Link directo a la página previa (null si hasPrevPage=false)
 nextLink: Link directo a la página siguiente (null si hasNextPage=false)
 }
 
-Se deberá poder buscar productos por categoría o por disponibilidad, y se deberá poder realizar un ordenamiento de estos productos de manera ascendente o descendente por precio.
+
+(Este punto es opcional) Se deberá poder buscar productos por categoría o por disponibilidad, y se deberá poder realizar 
+un ordenamiento de estos productos de manera ascendente o descendente por precio. 
 
 Se debe entregar:
 
 Además, agregar al router de carts los siguientes endpoints:
  OK. DELETE api/carts/:cid/products/:pid deberá eliminar del carrito el producto seleccionado.
  OK. PUT api/carts/:cid deberá actualizar todos los productos del carrito con un arreglo de productos.
-PUT api/carts/:cid/products/:pid deberá poder actualizar SÓLO la cantidad de ejemplares del producto por cualquier cantidad pasada desde req.body
-
-OK. DELETE api/carts/:cid deberá eliminar todos los productos del carrito
-OK. Esta vez, para el modelo de Carts, en su propiedad products, el id de cada producto generado dentro del array tiene que hacer referencia al modelo de Products. Modificar la ruta /:cid para que al traer todos los productos, los traiga completos mediante un “populate”. De esta manera almacenamos sólo el Id, pero al solicitarlo podemos desglosar los productos asociados.
+ OK. PUT api/carts/:cid/products/:pid deberá poder actualizar SÓLO la cantidad de ejemplares del producto por cualquier cantidad pasada desde req.body
+ OK. DELETE api/carts/:cid deberá eliminar todos los productos del carrito
+ OK. Esta vez, para el modelo de Carts, en su propiedad products, el id de cada producto generado dentro del array tiene que hacer referencia al modelo de Products.
+     Modificar la ruta /:cid para que al traer todos los productos, los traiga completos mediante un “populate”. 
+     De esta manera almacenamos sólo el Id, pero al solicitarlo podemos desglosar los productos asociados.
 
 Se debe entregar:
 

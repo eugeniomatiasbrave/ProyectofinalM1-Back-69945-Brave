@@ -20,6 +20,22 @@
   </div>
   {{/each}}
 </div>
+
+<!--paginado-->
+
+ <!--paginado-->
+
+<div class="pagination">
+  {{#if hasPrevPage}}
+    <a href="http://localhost:8080/products?page={{prevPage}}"><button class="btn-pagination">Anterior</button></a>
+  {{/if}}
+
+  <h4 class="page-number">{{page}}</h4>
+
+  {{#if hasNextPage}}
+    <a href="http://localhost:8080/products?page={{nextPage}}"><button class="btn-pagination">Siguiente</button></a>
+  {{/if}}
+</div>
 {{else}}
 <h1>No hay lista de productos en este momento</h1>
 {{/if}}

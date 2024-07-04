@@ -7,21 +7,18 @@ const router = Router();
 
 //Endpoint para traer todos los productos + limit productos.
 router.get('/', async (req, res) => {
-	const limit = parseInt(req.query.limit);
-	const products = await productsService.getProducts();
-  
+	const limit = parseInt(req.query.limit) || 10;
+	const page = parseInt(req.query.page) || 1;
+
+	const products = await productsService.getProducts(page, limit);
+	
 	if (products === null) {
 	  return res.status(500).send({ status:"error", error: 'Error al leer los productos'});
-	}
-  
-	if (limit) {
-	  products = products.slice(0, limit);
 	}
   
 	req.io.emit('Products',products);
 	res.send({ status:"success", payload:products });
   });
-
 
 //Endpoint para obtener un (id) producto.
 router.get('/:pid', async (req, res) => {
@@ -30,7 +27,7 @@ router.get('/:pid', async (req, res) => {
 	 // traigo el producto existente en el archivo.json o mongo db
 	const product = await productsService.getProductById(pid);
 	
-	if (product === undefined) { // me conviene usar undefined en este contexto mas q -1
+	if (product === null) { // me conviene usar undefined en este contexto mas q -1
 		return res.status(500).send({ status:"error", error: ' No se encontro el producto id:' + pid});
 	}
 	res.send({ status:"success", data: product })
@@ -70,7 +67,9 @@ router.post('/', uploader.array('thumbnail', 3), async (req, res) => {
 		return res.status(500).send({ status:"error", error: 'Error al crear el producto'});
 	}
 	
-	req.io.emit('ProductsIo', await productsService.getProducts());
+	const productsViews = await productsService.getProductsViews();
+
+	req.io.emit( 'ProductsIo', productsViews );
 	res.send({ status:"success", message: 'Producto creado' , payload: result }); // data: result es el producto creado.
 
     } catch (error) {
@@ -79,7 +78,6 @@ router.post('/', uploader.array('thumbnail', 3), async (req, res) => {
      }
   });
   
-
 //Endpoint para borrar un producto.
 router.delete('/:pid', async (req, res) => {
 	const pid = req.params.pid;

@@ -71,11 +71,11 @@ div {
 	flex-direction: column;
 	margin-bottom: 1px;
 	margin-top: 1px;
-	flex: 1; /* Esto asegura que cada grupo de formularios tenga la misma anchura */
+	flex: 1; 
   }
   
   .form-group:not(:last-child) {
-	margin-right: 10px; /* Esto añade un espacio entre las columnas */
+	margin-right: 10px; 
   }
   
   .form-control {
@@ -113,6 +113,30 @@ div {
   .btn-secundary:hover {
 	background-color: red;
   }
+
+  .pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.pagination button {
+  background-color: #007bff; 
+  color: white; 
+  padding: 10px 20px; 
+  border: none; 
+  cursor: pointer; 
+  border-radius: 5px; 
+  margin: 0 5px; 
+}
+
+.pagination button:hover {
+  background-color: #0056b3; 
+}
+
+.pagination h4 {
+  margin: 0 10px; 
+}
   
   
   
