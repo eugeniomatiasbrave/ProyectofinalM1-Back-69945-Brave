@@ -33,5 +33,5 @@ export default class ManagersProducts {
     deleteProduct(pid){ // elimina uno
         return productModel.deleteOne({_id:pid});
     };	
-}
+};
 
