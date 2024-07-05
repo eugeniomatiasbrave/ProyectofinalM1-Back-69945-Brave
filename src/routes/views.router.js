@@ -7,8 +7,9 @@ router.get("/", async (req, res) => {
 	
 	const page = parseInt(req.query.page) || 1;
 	const limit = parseInt(req.query.limit) || 4;
+	const sort = req.query.sort || "asc";
 
-	const productsPaginate = await productsService.getProducts(page, limit);
+	const productsPaginate = await productsService.getProducts(page, limit, sort);
 	const products = productsPaginate.docs;
 	const {hasPrevPage, hasNextPage, prevPage,nextPage, page:currentPage} = productsPaginate;
 

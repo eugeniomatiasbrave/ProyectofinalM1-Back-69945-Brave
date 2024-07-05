@@ -5,12 +5,15 @@ import uploader from '../services/uploader.js';
 
 const router = Router();
 
-//Endpoint para traer todos los productos + limit productos.
+// Endpoint para traer todos los productos + limit + page + sort.
+// Postman://http://localhost:8080/api/products?limit=10&page=1&sort=asc&maxPrice=20000
 router.get('/', async (req, res) => {
 	const limit = parseInt(req.query.limit) || 10;
 	const page = parseInt(req.query.page) || 1;
-
-	const products = await productsService.getProducts(page, limit);
+	const sort = req.query.sort;
+	const maxPrice = parseInt(req.query.maxPrice); // filto por precio maximo
+	
+	const products = await productsService.getProducts(page, limit, sort ,maxPrice);
 	
 	if (products === null) {
 	  return res.status(500).send({ status:"error", error: 'Error al leer los productos'});

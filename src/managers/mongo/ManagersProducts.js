@@ -2,9 +2,17 @@ import productModel from './models/product.model.js';
 
 export default class ManagersProducts {
 	
-    getProducts(page, limit) { // Busca todos
-		 return productModel.paginate({},{ limit, page,  lean:true });
-	};
+    getProducts(page, limit, sort, maxPrice) {
+        const filter = {};
+        if (maxPrice) {
+            filter.price = { $lte: maxPrice }; 
+        }
+        if (sort === 'asc' || sort === 'desc') {
+            return productModel.paginate(filter, { limit, page, lean: true, sort: { price: sort } }); // Ordenar por precio
+        } else {
+            return productModel.paginate(filter, { limit, page, lean: true }); // Sin ordenamiento si sort no es válido
+        }
+    };
 
     getProductsViews() {
         return productModel.find({}).lean();

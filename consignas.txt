@@ -11,19 +11,19 @@ Se debe entregar:
 
  Modificar el método GET / para que cumpla con los siguientes puntos:
  Deberá poder recibir por query params 
-  Un limit (opcional) 
+  OK. Un limit (opcional) 
      -limit permitirá devolver sólo el número de elementos solicitados al momento de la petición, en caso de no recibir limit, éste será de 10.
-  Una page (Si o si)
+  OK. Una page (Si o si)
      -page permitirá devolver la página que queremos buscar, en caso de no recibir page, ésta será de 1
-  Un sort (opcional) 
+  OK. Un sort (opcional) 
      -sort: asc/desc, para realizar ordenamiento ascendente o descendente por precio, en caso de no recibir sort, no realizar ningún ordenamiento
-  Un query (opcional)
+  OK. Un query (opcional)
      -query, el tipo de elemento que quiero buscar (es decir, qué filtro aplicar), en caso de no recibir query, realizar la búsqueda general
   
 
 Se debe entregar:
 
-El método GET de todos los productos deberá devolver un objeto con el siguiente formato:
+ OK. El método GET de todos los productos deberá devolver un objeto con el siguiente formato:
 {
 status:success/error
 payload: Resultado de los productos solicitados
