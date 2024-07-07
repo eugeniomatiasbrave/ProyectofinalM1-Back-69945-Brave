@@ -1,31 +1,41 @@
 import { Router } from "express";
-import {cartsService} from "../managers/index.js";
-import {productsService} from "../managers/index.js";
+import {cartsService, productsService} from "../managers/index.js";
 
 const router = Router();
 
-// ENDPOINT que muestra todo el carrito
+// ENDPOINT que muestra todos los carritos. Revisado. Tene sentido este endpoint?
+// http://localhost:8080/api/carts
 router.get('/', async (req, res) => {
-	const carts = await cartsService.getCarts();
-	  if (carts === null) {
-	    return res.status(500).send({ status:"error", error: 'Error al leer los carritos'});
-	}
-	res.send({ status:"success", payload:carts });
-  });
+	
+  try {
+    const carts = await cartsService.getCarts();
+    if (!carts) {
+        return res.status(404).send({ status: "error", error: 'No se encontraron carritos' });
+    }
+    res.status(200).send({ status: "success", data: carts });
+  } catch (error) {
+    console.error('Error al leer los carritos:', error);
+    res.status(500).send({ status: "error", error: 'Error al leer los carritos' });
+}
+});
 
-
-// 1. ENDPOINT que muestra un carrito cid especifico // ok 
+// ENDPOINT que muestra un carrito cid especifico. Revisado
 router.get('/:cid', async (req, res) => {
-	const cid = req.params.cid;
+  const cid = req.params.cid;
 
-    const cart = await cartsService.getCartById(String(cid));
-	  const ProductToCart = cart.products
+  try {
+      const cart = await cartsService.getCartById(cid);
+      if (!cart) {
+          return res.status(404).send({ status: "error", error: 'cid no encontrado' });
+      }
 
-	  if (cart === undefined) { // me conviene usar undefined en este contexto mas q -1
-		  return res.status(500).send({ status:"error", error: ' No se encontro el producto id:' });
-  	}
-	  res.send({ status:"success", data: ProductToCart })
-})
+      const productsInCart = cart.products;
+      res.send({ status: "success", data: productsInCart });
+  } catch (error) {
+      console.error('Error al obtener el carrito:', error);
+      res.status(500).send({ status: "error", error: 'Error al obtener el carrito' });
+  }
+});
 
 // 2. ENDPOINT crea el carrito...OK
 router.post('/', async (req, res) => {
@@ -38,26 +48,39 @@ router.post('/', async (req, res) => {
   }
 });
 
-// 3. ENDPOINT agregar el producto al arreglo “products” del carrito seleccionado // OK
+// ENDPOINT agregar los productos al carrito, 
+// si es el primer producto y si esta vacia la collecion crea el carrito
+// Si el carrito ya existe agrega los productos al carrito.
 router.post('/:cid/products/:pid', async (req, res) => {
-  const { cid, pid } = req.params; 
-  const cart = await cartsService.getCartById(String(cid));
-
-  if (!cart) {
-      return res.status(404).send({ status: "error", error: 'Carrito no encontrado' });
-  }
-
-  const product = await productsService.getProductById(pid);
-
-  if (!product) {
-      return res.status(404).send({ status: "error", error: 'Producto no encontrado con id: ' + pid});
-  }
-
-  let quantity = parseInt(req.body.quantity) || 1; // Si no se envía un quantity, por defecto es 1
-  const productToAdd = { product: pid, quantity };
-  
   try {
-      const updateResult = await cartsService.addProductToCart(cid, productToAdd);
+      let cartId;
+      const cid = req.params.cid;
+      const pid = req.params.pid;
+      const quantity = req.body.quantity || 1;
+
+      const carts = await cartsService.getCarts();
+
+      if (!cid || carts.length === 0) {
+          const newCart = await cartsService.createCart();
+          cartId = newCart._id;
+      } else {
+          const cart = await cartsService.getCartById(cid);
+
+          if (!cart) {
+              return res.status(404).send({ status: "error", error: 'Carrito no encontrado' });
+          }
+
+          cartId = cid;
+      }
+
+      const product = await productsService.getProductById(pid);
+
+      if (!product) {
+          return res.status(404).send({ status: "error", error: 'Producto no encontrado con id: ' + pid });
+      }
+
+      const productToAdd = { product: pid, quantity };
+      const updateResult = await cartsService.addProductToCart(cartId, productToAdd);
 
       if (updateResult.nModified === 0) {
           return res.status(500).send({ status: "error", error: 'Error al agregar el producto al carrito' });

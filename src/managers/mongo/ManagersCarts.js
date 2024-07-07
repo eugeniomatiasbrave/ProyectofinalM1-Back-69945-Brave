@@ -7,7 +7,7 @@ export default class ManagersCarts {
 	}
 
     getCartById (cid) {
-		return cartModel.findOne( {_id: String(cid)}).lean(); // Busca solo uno
+		return cartModel.findOne( {_id: cid}).lean(); // Busca solo uno
 	};
 
     createCart() {
