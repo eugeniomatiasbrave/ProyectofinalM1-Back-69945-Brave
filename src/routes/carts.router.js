@@ -48,7 +48,7 @@ router.post('/', async (req, res) => {
   }
 });
 
-// ENDPOINT agregar los productos al carrito, 
+// ENDPOINT agregar los productos al carrito. Revisado
 // si es el primer producto y si esta vacia la collecion crea el carrito
 // Si el carrito ya existe agrega los productos al carrito.
 router.post('/:cid/products/:pid', async (req, res) => {
@@ -93,14 +93,14 @@ router.post('/:cid/products/:pid', async (req, res) => {
   }
 });
 
-// 4. DELETE api/carts/:cid deberá eliminar todos los product pid de products dejando el cid con su products:[]. No elimina el carrito cid.
+// DELETE api/carts/:cid deberá eliminar todos los product pid de products dejando el cid con su products:[]. No elimina el carrito cid. Revisado
 router.delete('/:cid', async (req, res) => {
   const cid = req.params.cid;
   const result = await cartsService.deleteAllProductsCid(cid);
   res.send({ message: 'Todos los products borrados del carrito', data: result });
 });
 
-// 5. eliminar del carrito el producto seleccionado. OK
+// Eliminar del carrito el producto seleccionado. Revisado
 router.delete('/:cid/products/:pid', async (req, res) => {
   const cid = req.params.cid; 
   const pid = req.params.pid;
@@ -108,7 +108,7 @@ router.delete('/:cid/products/:pid', async (req, res) => {
   res.send({ message: 'Producto eliminado del carrito', data: result });
 });
 
-// 6. ENDPOINT PUT api/carts/:cid deberá actualizar todos los productos del carrito con un arreglo de productos.
+// ENDPOINT PUT api/carts/:cid deberá actualizar todos los productos del carrito con un arreglo de productos. Revisado
 router.put('/:cid', async (req, res) => {
   const cid = req.params.cid;
   const products = req.body.products; // Suponiendo que se envía un array de productos en el cuerpo de la solicitud
@@ -133,7 +133,7 @@ router.put('/:cid', async (req, res) => {
   }
 });
 
-// 7. PUT api/carts/:cid/products/:pid deberá poder actualizar SÓLO la cantidad de ejemplares del producto por cualquier cantidad pasada desde req.body
+// PUT api/carts/:cid/products/:pid deberá poder actualizar SÓLO la cantidad de ejemplares del producto por cualquier cantidad pasada desde req.body
 router.put('/:cid/products/:pid', async (req, res) => {
   const { cid, pid } = req.params;
   const { quantity } = req.body;
@@ -152,6 +152,4 @@ router.put('/:cid/products/:pid', async (req, res) => {
   }
 });
 
-
-
-export default router
+export default router;

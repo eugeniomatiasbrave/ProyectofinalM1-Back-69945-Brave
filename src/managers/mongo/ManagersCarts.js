@@ -17,9 +17,10 @@ export default class ManagersCarts {
 
     // Método para agregar un producto al carrito seleccionado
     addProductToCart(cid, product) {
-        return cartModel.updateOne(
-            { _id: String(cid) },
-            { $push: { products: product } }
+        return cartModel.findOneAndUpdate(
+            { _id: String(cid), "products.product": product.product },
+            { $inc: { "products.$.quantity": product.quantity } },
+            { new: true }
         );
     };
 
