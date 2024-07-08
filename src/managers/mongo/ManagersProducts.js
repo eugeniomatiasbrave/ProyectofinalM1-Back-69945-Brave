@@ -2,11 +2,19 @@ import productModel from './models/product.model.js';
 
 export default class ManagersProducts {
 	
-    getProducts(page, limit, sort, maxPrice) {
+    getProducts(page, limit, sort, maxPrice, category, stock) {
         const filter = {};
+
         if (maxPrice) {
             filter.price = { $lte: maxPrice }; 
         }
+        if (category) {
+            filter.category = category;
+        }
+        if (stock) {
+            filter.stock = { $gte: stock };
+        }
+
         if (sort === 'asc' || sort === 'desc') {
             return productModel.paginate(filter, { limit, page, lean: true, sort: { price: sort } }); // Ordenar por precio
         } else {

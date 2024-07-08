@@ -19,7 +19,7 @@ router.get('/', async (req, res) => {
 }
 });
 
-// ENDPOINT que muestra un carrito cid especifico. Revisado
+// ENDPOINT que muestra un carrito cid especifico.
 router.get('/:cid', async (req, res) => {
   const cid = req.params.cid;
 
@@ -37,7 +37,7 @@ router.get('/:cid', async (req, res) => {
   }
 });
 
-// 2. ENDPOINT crea el carrito...OK
+// ENDPOINT crea el carrito.
 router.post('/', async (req, res) => {
   try {
       const newCart = await cartsService.createCart();
@@ -48,7 +48,7 @@ router.post('/', async (req, res) => {
   }
 });
 
-// ENDPOINT agregar los productos al carrito. Revisado
+// ENDPOINT agregar los productos al carrito.
 // si es el primer producto y si esta vacia la collecion crea el carrito
 // Si el carrito ya existe agrega los productos al carrito.
 router.post('/:cid/products/:pid', async (req, res) => {
@@ -93,14 +93,14 @@ router.post('/:cid/products/:pid', async (req, res) => {
   }
 });
 
-// DELETE api/carts/:cid deberá eliminar todos los product pid de products dejando el cid con su products:[]. No elimina el carrito cid. Revisado
+// DELETE api/carts/:cid deberá eliminar todos los product pid de products dejando el cid con su products:[]. No elimina el carrito cid.
 router.delete('/:cid', async (req, res) => {
   const cid = req.params.cid;
   const result = await cartsService.deleteAllProductsCid(cid);
   res.send({ message: 'Todos los products borrados del carrito', data: result });
 });
 
-// Eliminar del carrito el producto seleccionado. Revisado
+// Eliminar del carrito el producto seleccionado.
 router.delete('/:cid/products/:pid', async (req, res) => {
   const cid = req.params.cid; 
   const pid = req.params.pid;
@@ -108,14 +108,14 @@ router.delete('/:cid/products/:pid', async (req, res) => {
   res.send({ message: 'Producto eliminado del carrito', data: result });
 });
 
-// ENDPOINT PUT api/carts/:cid deberá actualizar todos los productos del carrito con un arreglo de productos. Revisado
+// ENDPOINT PUT api/carts/:cid deberá actualizar todos los productos del carrito con un arreglo de productos.
 router.put('/:cid', async (req, res) => {
   const cid = req.params.cid;
   const products = req.body.products; // Suponiendo que se envía un array de productos en el cuerpo de la solicitud
 
   const cart = await cartsService.getCartById(String(cid));
 
-  if (cart === undefined) { // me conviene usar undefined en este contexto mas q -1
+  if (cart === undefined) {
     return res.status(500).send({ status:"error", error: ' No se encontro el carrito' });
   }
   

@@ -17,8 +17,7 @@ const schema = new mongoose.Schema({
                 default: 1
             }
         }
-    ]
-    
+    ]   
 });
 
 schema.pre(['find','findOne'], function(){

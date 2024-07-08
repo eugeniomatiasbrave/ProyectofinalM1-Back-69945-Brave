@@ -4,7 +4,6 @@ socket.on('ProductsIo', (data) => {
   updateProductsList(data);
 });
 
-
 socket.on('productsUpdated', (updatedProducts) => {
   updateProductsList(updatedProducts);
 });
@@ -31,8 +30,7 @@ socket.on('productsUpdated', (updatedProducts) => {
        });
  });
 
-
-function updateProductsList(productsIo) {
+const updateProductsList = (productsIo) => {
   const productsContainer = document.getElementById('productsContainer');
 
   productsContainer.innerHTML = '';
@@ -63,8 +61,8 @@ function updateProductsList(productsIo) {
   
 };
 
-// Nueva función para eliminar un producto
-function deleteProduct(productId) {
+// Función para eliminar un producto
+const deleteProduct = (productId) => {
   fetch(`/api/products/${productId}`, {
     method: 'DELETE'
   })
@@ -77,4 +75,4 @@ function deleteProduct(productId) {
   .catch((error) => {
     console.error('Error:', error);
   });
-}
+};

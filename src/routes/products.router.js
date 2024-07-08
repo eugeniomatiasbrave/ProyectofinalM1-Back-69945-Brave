@@ -5,7 +5,7 @@ import uploader from '../services/uploader.js';
 
 const router = Router();
 
-// Endpoint para traer todos los productos + limit + page + sort + filtro preciomax. revisado
+// Endpoint para traer todos los productos + limit + page + sort + filtro preciomax. + category + stock.
 // Postman://http://localhost:8080/api/products?limit=10&page=1&sort=asc&maxPrice=20000
 router.get('/', async (req, res) => {
     try {
@@ -13,8 +13,10 @@ router.get('/', async (req, res) => {
         const page = parseInt(req.query.page) || 1;
         const sort = req.query.sort;
         const maxPrice = parseInt(req.query.maxPrice);
+        const category = req.query.category;
+        const stock = parseInt(req.query.stock);
 
-        const products = await productsService.getProducts(page, limit, sort, maxPrice);
+        const products = await productsService.getProducts(page, limit, sort, maxPrice, category, stock);
 
         if (!products) {
             return res.status(400).send({ status: "error", error: 'Error al obtener los productos' });
@@ -28,7 +30,7 @@ router.get('/', async (req, res) => {
     }
 });
 
-//Endpoint para obtener un (id) producto. revisado
+//Endpoint para obtener un (id) producto.
 router.get('/:pid', async (req, res) => {
     try {
         const pid = req.params.pid;
@@ -45,8 +47,7 @@ router.get('/:pid', async (req, res) => {
     }
 })
 
-
-//Endpoint para crear una producto. revisado
+//Endpoint para crear una producto.
 router.post('/', uploader.array('thumbnail', 3), async (req, res) => {
     //const product = req.body;
     const { title, description, code, price, category, stock } = req.body;
@@ -92,7 +93,7 @@ router.post('/', uploader.array('thumbnail', 3), async (req, res) => {
     }
 });
 
-//Endpoint para borrar un producto. revisado
+//Endpoint para borrar un producto.
 router.delete('/:pid', async (req, res) => {
     const pid = req.params.pid;
     try {
@@ -119,7 +120,7 @@ router.delete('/:pid', async (req, res) => {
     }
 });
 
-// Endpoint para actualizar un producto. Revisado
+// Endpoint para actualizar un producto.
 router.put('/:pid', async (req, res) => {
     try {
         const pid = req.params.pid;

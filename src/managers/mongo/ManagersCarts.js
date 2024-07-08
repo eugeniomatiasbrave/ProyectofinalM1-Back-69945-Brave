@@ -24,7 +24,6 @@ export default class ManagersCarts {
         );
     };
 
-
     //Metodo elimina un product del carrito
     deleteProductCart(cid, pid) {
         return cartModel.updateOne(
