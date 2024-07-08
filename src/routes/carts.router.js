@@ -95,17 +95,27 @@ router.post('/:cid/products/:pid', async (req, res) => {
 
 // DELETE api/carts/:cid deberá eliminar todos los product pid de products dejando el cid con su products:[]. No elimina el carrito cid.
 router.delete('/:cid', async (req, res) => {
-  const cid = req.params.cid;
-  const result = await cartsService.deleteAllProductsCid(cid);
-  res.send({ message: 'Todos los products borrados del carrito', data: result });
+  try {
+    const cid = req.params.cid;
+    const result = await cartsService.deleteAllProductsCid(cid);
+    res.send({ message: 'Todos los productos borrados del carrito', data: result });
+  } catch (error) {
+    console.error('Error al borrar productos del carrito:', error);
+    res.status(500).send({ message: 'Error al borrar productos del carrito' });
+  }
 });
 
 // Eliminar del carrito el producto seleccionado.
 router.delete('/:cid/products/:pid', async (req, res) => {
-  const cid = req.params.cid; 
-  const pid = req.params.pid;
-  const result = await cartsService.deleteProductCart(cid, pid);
-  res.send({ message: 'Producto eliminado del carrito', data: result });
+  try {
+    const cid = req.params.cid;
+    const pid = req.params.pid;
+    const result = await cartsService.deleteProductCart(cid, pid);
+    res.send({ message: 'Producto eliminado del carrito', data: result });
+  } catch (error) {
+    console.error('Error al eliminar el producto del carrito:', error);
+    res.status(500).send({ message: 'Error al eliminar el producto del carrito' });
+  }
 });
 
 // ENDPOINT PUT api/carts/:cid deberá actualizar todos los productos del carrito con un arreglo de productos.
@@ -135,10 +145,11 @@ router.put('/:cid', async (req, res) => {
 
 // PUT api/carts/:cid/products/:pid deberá poder actualizar SÓLO la cantidad de ejemplares del producto por cualquier cantidad pasada desde req.body
 router.put('/:cid/products/:pid', async (req, res) => {
-  const { cid, pid } = req.params;
-  const { quantity } = req.body;
 
   try {
+      const { cid, pid } = req.params;
+      const { quantity } = req.body;
+
       const result = await cartsService.updateProductQuantity(cid, pid, quantity);
 
       if (result.nModified === 0) {
